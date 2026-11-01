@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}All games — Gameora{% endblock %}
+{% block description %}Browse every game in the Gameora arcade: Block Blaster, Sudoku, Subway Dash and Memory Match.{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="container">
+    <p class="eyebrow"><span class="pulse" aria-hidden="true"></span>The whole arcade</p>
+    <h1>All games</h1>
+    <p class="lede">Four hand-built browser games, preserved exactly as they were and served by Flask. Search, filter, and jump straight in.</p>
+  </div>
+</section>
+
+{% include "_catalogue.html" %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/portal.js') }}" defer></script>
+{% endblock %}

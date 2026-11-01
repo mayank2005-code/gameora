@@ -1,0 +1,30 @@
+{% macro game_card(game) %}
+<article class="game-card"
+         style="--accent: {{ game.accent }}"
+         data-title="{{ game.title|lower }}"
+         data-category="{{ game.category }}"
+         data-description="{{ game.description|lower }}">
+  <a class="card-media" href="{{ url_for('play_game', game_id=game.id) }}" aria-label="Play {{ game.title }}">
+    <img src="{{ url_for('static', filename='images/' ~ game.thumbnail) }}"
+         alt="{{ game.title }} artwork" width="640" height="640" loading="lazy">
+    <span class="play-badge" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><path d="M8 5.5v13l11-6.5z" fill="currentColor"></path></svg>
+    </span>
+  </a>
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="category-chip"><span class="dot" aria-hidden="true"></span>{{ game.category }}</span>
+      <span class="card-note">Instant play</span>
+    </div>
+    <h3><a href="{{ url_for('play_game', game_id=game.id) }}">{{ game.title }}</a></h3>
+    <p class="card-desc">{{ game.description }}</p>
+    <div class="card-foot">
+      <a class="play-btn" href="{{ url_for('play_game', game_id=game.id) }}">
+        Play now
+        <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+      <span class="card-note">{{ game.highlights[0] }}</span>
+    </div>
+  </div>
+</article>
+{% endmacro %}

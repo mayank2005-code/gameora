@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Page not found — Gameora{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <div class="container error-inner">
+    <p class="error-code" aria-hidden="true">404</p>
+    <p class="eyebrow">Level not found</p>
+    <h1>This page doesn't exist.</h1>
+    <p class="lede">{{ message }}</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{{ url_for('index') }}">Back home</a>
+      <a class="btn btn-ghost" href="{{ url_for('games_page') }}">Browse all games</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

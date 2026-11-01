@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Gameora — Pick a game. Play instantly.{% endblock %}
+{% block description %}Play every game from the PlayGrid arcade in one place: Block Blaster, Sudoku, Subway Dash and Memory Match. Free, instant, and served by Flask.{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="pulse" aria-hidden="true"></span>{{ game_count }} games &middot; zero downloads</p>
+      <h1>Pick a game.<br><span class="gradient-text">Play instantly.</span></h1>
+      <p class="lede">
+        The whole arcade from the original site, now living inside one Flask app.
+        Every game is fully playable, keeps its original design, and saves your
+        best scores in the browser.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#catalogue">
+          Browse the arcade
+          <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+        <a class="btn btn-ghost" href="{{ url_for('games_page') }}">View all games</a>
+      </div>
+      <ul class="hero-points">
+        <li><span class="tick" aria-hidden="true">&#10003;</span> Runs in your browser</li>
+        <li><span class="tick" aria-hidden="true">&#10003;</span> No sign-up</li>
+        <li><span class="tick" aria-hidden="true">&#10003;</span> Scores saved locally</li>
+      </ul>
+    </div>
+
+    <div class="hero-panel" aria-hidden="true">
+      <div class="panel-top">
+        <span class="status-dot"></span>
+        <span>Library ready</span>
+        <span class="panel-pill">{{ game_count }} games</span>
+      </div>
+      <div class="panel-grid">
+        {% for game in games %}
+        <div class="hero-tile" style="background-image: url('{{ url_for('static', filename='images/' ~ game.thumbnail) }}')">
+          <span>{{ game.title }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="panel-foot">
+        <span>HTML5 &middot; Canvas &middot; Vanilla JS</span>
+        <span>Served by Flask</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include "_catalogue.html" %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/portal.js') }}" defer></script>
+{% endblock %}

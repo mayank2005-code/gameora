@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f6fa">
+  <title>{% block title %}Gameora — Browser Games{% endblock %}</title>
+  <meta name="description" content="{% block description %}A unified collection of instant-play browser games, served by Flask.{% endblock %}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/portal.css') }}">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="{{ url_for('index') }}" aria-label="Gameora home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" focusable="false">
+            <rect x="6" y="6" width="8" height="8" rx="2.5" fill="#ffffff"></rect>
+            <rect x="18" y="6" width="8" height="8" rx="2.5" fill="#c7d2fe"></rect>
+            <rect x="6" y="18" width="8" height="8" rx="2.5" fill="#c7d2fe"></rect>
+            <rect x="18" y="18" width="8" height="8" rx="2.5" fill="#fbbf24"></rect>
+          </svg>
+        </span>
+        <span class="brand-text">Gameora</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="{{ url_for('index') }}"{% if active_page == 'home' %} class="is-active" aria-current="page"{% endif %}>Home</a>
+        <a href="{{ url_for('games_page') }}"{% if active_page == 'games' %} class="is-active" aria-current="page"{% endif %}>All games</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a class="brand brand-footer" href="{{ url_for('index') }}" aria-label="Gameora home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" focusable="false">
+              <rect x="6" y="6" width="8" height="8" rx="2.5" fill="#ffffff"></rect>
+              <rect x="18" y="6" width="8" height="8" rx="2.5" fill="#c7d2fe"></rect>
+              <rect x="6" y="18" width="8" height="8" rx="2.5" fill="#c7d2fe"></rect>
+              <rect x="18" y="18" width="8" height="8" rx="2.5" fill="#fbbf24"></rect>
+            </svg>
+          </span>
+          <span class="brand-text">Gameora</span>
+        </a>
+        <p>Every game from the original PlayGrid arcade, migrated into one Flask application. No installs, no accounts — just play.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('games_page') }}">All games</a>
+        <a href="{{ url_for('api_games') }}">Games API</a>
+      </nav>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; {{ current_year }} Gameora. All games run locally in your browser.</p>
+      <p>{{ game_count }} {{ 'game' if game_count == 1 else 'games' }} &middot; Built with Flask</p>
+    </div>
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>
