@@ -32,8 +32,9 @@ GAMES_DIR = BASE_DIR / "static" / "games"
 HOME_LINK_MARKER = "<!-- gameora:home-link -->"
 
 app = Flask(__name__)
+application = app
 
-app.config.update(TEMPLATES_AUTO_RELOAD=True)
+app.config.update(TEMPLATES_AUTO_RELOAD=False)
 app.json.sort_keys = False
 
 
