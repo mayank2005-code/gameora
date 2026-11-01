@@ -1,5 +1,5 @@
 {% from "_game_card.html" import game_card %}
-<section class="catalogue" id="catalogue" aria-labelledby="catalogue-title">
+<section class="catalogue{% if catalogue_context == 'home' %} catalogue--home{% endif %}" id="catalogue" aria-labelledby="catalogue-title">
   <div class="container">
     <div class="catalogue-tools">
       <label class="search-box" for="game-search">
