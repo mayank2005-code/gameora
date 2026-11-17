@@ -29,6 +29,7 @@ from games import all_games, categories, get_game
 
 BASE_DIR = Path(__file__).resolve().parent
 GAMES_DIR = BASE_DIR / "static" / "games"
+PUBLIC_DIR = BASE_DIR / "public"
 HOME_LINK_MARKER = "<!-- gameora:home-link -->"
 
 app = Flask(__name__)
@@ -84,6 +85,12 @@ def render_game_document(game):
 def favicon():
     """Serve the portal icon for games that do not declare their own favicon."""
     return send_from_directory(BASE_DIR / "static", "favicon.svg", mimetype="image/svg+xml")
+
+
+@app.get("/ads.txt")
+def ads_txt():
+    """Serve the AdSense verification file from the public root."""
+    return Response((PUBLIC_DIR / "ads.txt").read_text(encoding="utf-8"), mimetype="text/plain")
 
 
 @app.get("/")
