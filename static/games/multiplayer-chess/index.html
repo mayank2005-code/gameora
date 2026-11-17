@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-adsense-account" content="ca-pub-3816836110238928">
+  <meta name="theme-color" content="#f5f6fa">
+  <title>Multiplayer Chess | Gameora</title>
+  <meta name="description" content="Create a private six-character chess room code, share it with a friend, and play peer-to-peer over WebRTC without an account.">
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/portal.css">
+  <link rel="stylesheet" href="/static/games/multiplayer-chess/chess.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/" aria-label="Gameora home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" focusable="false">
+            <rect x="6" y="6" width="8" height="8" rx="2.5" fill="#ffffff"></rect>
+            <rect x="18" y="6" width="8" height="8" rx="2.5" fill="#c7d2fe"></rect>
+            <rect x="6" y="18" width="8" height="8" rx="2.5" fill="#c7d2fe"></rect>
+            <rect x="18" y="18" width="8" height="8" rx="2.5" fill="#fbbf24"></rect>
+          </svg>
+        </span>
+        <span class="brand-text">Gameora</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/games">All games</a>
+        <a href="/chess/" class="is-active" aria-current="page">Multiplayer</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="screen-lobby" class="mc-screen">
+      <div class="container mc-hero">
+        <div class="mc-hero-copy">
+          <p class="eyebrow"><span class="pulse" aria-hidden="true"></span>Multiplayer &middot; Private rooms</p>
+          <h1>Multiplayer Chess</h1>
+          <p class="lede">
+            Create a private room, share the six-character code, and play chess with a friend.
+            The browsers connect directly with WebRTC, so the game itself is peer-to-peer.
+          </p>
+          <ul class="hero-points">
+            <li><span class="tick" aria-hidden="true">&#10003;</span> No accounts</li>
+            <li><span class="tick" aria-hidden="true">&#10003;</span> Two players per room</li>
+            <li><span class="tick" aria-hidden="true">&#10003;</span> Moves validated in both browsers</li>
+          </ul>
+        </div>
+
+        <aside class="mc-card mc-lobby-card" aria-labelledby="lobby-title">
+          <h2 id="lobby-title">Start a private game</h2>
+          <label class="mc-field" for="nickname">
+            <span>Your nickname</span>
+            <input id="nickname" name="nickname" type="text" maxlength="24" autocomplete="nickname" placeholder="e.g. Alex" spellcheck="false">
+          </label>
+
+          <div class="mc-lobby-actions">
+            <button id="btn-create" class="btn btn-primary mc-btn-wide" type="button">
+              Create private room
+            </button>
+            <button id="btn-open-join" class="btn btn-ghost mc-btn-wide" type="button">
+              Join with a room code
+            </button>
+          </div>
+
+          <p id="lobby-error" class="mc-error" role="alert" hidden></p>
+          <p id="resume-notice" class="mc-notice" hidden></p>
+          <p class="mc-hint">
+            The host gets a six-character code. Send it to one friend; the person who creates the
+            room and the person who joins must both keep this page open.
+          </p>
+        </aside>
+      </div>
+
+      <div class="container mc-steps-wrap">
+        <div class="mc-steps" aria-label="How private rooms work">
+          <article class="mc-step">
+            <span class="mc-step-number">1</span>
+            <h2>Create a room</h2>
+            <p>Enter a nickname and create a room. The server gives you a private six-character code that expires after 30 minutes.</p>
+          </article>
+          <article class="mc-step">
+            <span class="mc-step-number">2</span>
+            <h2>Share the code</h2>
+            <p>Send the code to one friend. They enter it on this page and the room accepts the first person who joins.</p>
+          </article>
+          <article class="mc-step">
+            <span class="mc-step-number">3</span>
+            <h2>Play directly</h2>
+            <p>The server helps the browsers exchange connection details, then the chess moves travel directly over WebRTC.</p>
+          </article>
+        </div>
+
+        <details class="mc-limits">
+          <summary>Important limitations</summary>
+          <div class="mc-limits-body">
+            <ul>
+              <li>No STUN or TURN server is used. The direct connection may work on the same local network or in favourable network setups, but it is not guaranteed across different networks.</li>
+              <li>Some browsers hide local IP addresses behind mDNS names. If the connection fails, try both devices on the same Wi-Fi network or use two tabs on one computer.</li>
+              <li>The signaling server stores only the room record and the temporary WebRTC offer/answer. It never receives chess moves or game history.</li>
+              <li>Refreshing or closing a tab destroys the peer connection. Create or join a new room to play again.</li>
+              <li>Both browsers validate chess moves locally, but this is not server-side anti-cheat. A modified client can cheat.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="screen-create" class="mc-screen" hidden>
+      <div class="container mc-screen-inner">
+        <div class="mc-screen-head">
+          <button class="mc-back" type="button" data-action="back">&#8592; Back to lobby</button>
+          <p class="eyebrow">Private room &middot; You are the host</p>
+          <h1>Your room code</h1>
+          <p class="lede">Send this code to your opponent. They can join from the same page.</p>
+        </div>
+
+        <div id="create-connection" class="mc-status" data-tone="neutral" role="status" aria-live="polite">
+          <span class="mc-status-dot" aria-hidden="true"></span>
+          <span class="mc-status-text">Creating your private room&hellip;</span>
+        </div>
+
+        <div class="mc-panels">
+          <article class="mc-card">
+            <p class="mc-step-label">Room code</p>
+            <h2>Share this code</h2>
+            <p class="mc-hint">Six characters, no spaces. The first person who joins gets the second seat.</p>
+            <div id="room-code" class="mc-room-code" aria-label="Room code">------</div>
+            <div class="mc-code-actions">
+              <button id="copy-room-code" class="btn btn-primary" type="button" disabled>Copy room code</button>
+              <span id="copy-room-feedback" class="mc-copy-feedback" role="status"></span>
+            </div>
+            <p id="room-meta" class="mc-meta"></p>
+          </article>
+
+          <article class="mc-card">
+            <p class="mc-step-label">Connection</p>
+            <h2>Keep this tab open</h2>
+            <p class="mc-hint">
+              The room waits for one opponent. When they join, the browsers exchange connection
+              details automatically and the game starts when the data channel is ready.
+            </p>
+            <p id="create-error" class="mc-error" role="alert" hidden></p>
+            <button id="btn-cancel-room" class="btn btn-ghost mc-btn-wide" type="button">Cancel room</button>
+          </article>
+        </div>
+
+        <p class="mc-footnote">
+          Rooms expire after 30 minutes. The room code is private but it is not a password; only
+          share it with the person you want to play.
+        </p>
+      </div>
+    </section>
+
+    <section id="screen-join" class="mc-screen" hidden>
+      <div class="container mc-screen-inner">
+        <div class="mc-screen-head">
+          <button class="mc-back" type="button" data-action="back">&#8592; Back to lobby</button>
+          <p class="eyebrow">Private room &middot; You are joining</p>
+          <h1>Join a room</h1>
+          <p class="lede">Enter the six-character code the host sent you.</p>
+        </div>
+
+        <div id="join-connection" class="mc-status" data-tone="neutral" role="status" aria-live="polite">
+          <span class="mc-status-dot" aria-hidden="true"></span>
+          <span class="mc-status-text">Enter a room code to begin.</span>
+        </div>
+
+        <div class="mc-panels">
+          <article class="mc-card">
+            <p class="mc-step-label">Room code</p>
+            <h2>Enter the code</h2>
+            <label class="mc-field mc-field--code" for="join-code">
+              <span>Six-character room code</span>
+              <input id="join-code" name="join-code" class="mc-room-code-input" type="text" inputmode="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC234">
+            </label>
+            <button id="btn-join-room" class="btn btn-primary mc-btn-wide" type="button">Join room</button>
+            <p id="join-error" class="mc-error" role="alert" hidden></p>
+          </article>
+
+          <article class="mc-card">
+            <p class="mc-step-label">What happens next</p>
+            <h2>Wait for the host</h2>
+            <p class="mc-hint">
+              The host prepares a WebRTC offer. Keep this tab open while the browsers connect;
+              the game starts automatically when the data channel is ready.
+            </p>
+            <p class="mc-hint">
+              The room server only relays temporary connection details. Chess moves go directly
+              between the two browsers.
+            </p>
+          </article>
+        </div>
+
+        <p class="mc-footnote">
+          If the room is full, expired, or cancelled, ask the host to create a new one. Refreshing
+          or closing this tab ends the session.
+        </p>
+      </div>
+    </section>
+
+    <section id="screen-game" class="mc-screen" hidden>
+      <div class="container mc-game">
+        <div class="mc-game-top">
+          <div>
+            <p class="eyebrow">Private room &middot; Peer-to-peer</p>
+            <h1 class="mc-game-title">Multiplayer Chess</h1>
+          </div>
+          <div class="mc-game-top-actions">
+            <span id="game-connection" class="mc-status mc-status--compact" data-tone="neutral" role="status" aria-live="polite">
+              <span class="mc-status-dot" aria-hidden="true"></span>
+              <span class="mc-status-text">Connecting&hellip;</span>
+            </span>
+            <button id="btn-leave" class="btn btn-ghost" type="button">Leave</button>
+          </div>
+        </div>
+
+        <div id="disconnect-banner" class="mc-alert" role="alert" hidden>
+          <div>
+            <strong>Connection lost</strong>
+            <p id="disconnect-message">The opponent disconnected. This game is paused because peer-to-peer sessions cannot be resumed.</p>
+          </div>
+          <button id="btn-start-over" class="btn btn-primary" type="button">Start over</button>
+        </div>
+
+        <div class="mc-players">
+          <div id="opponent-card" class="mc-player">
+            <span class="mc-avatar" aria-hidden="true">B</span>
+            <div class="mc-player-info">
+              <span class="mc-player-role">Opponent</span>
+              <strong id="opponent-name">Opponent</strong>
+            </div>
+            <span id="opponent-color" class="mc-color-badge" data-color="none">&mdash;</span>
+          </div>
+
+          <div id="turn-indicator" class="mc-turn" aria-live="polite">Waiting for game to start&hellip;</div>
+
+          <div id="self-card" class="mc-player mc-player--self">
+            <span class="mc-avatar" aria-hidden="true">A</span>
+            <div class="mc-player-info">
+              <span class="mc-player-role">You</span>
+              <strong id="self-name">You</strong>
+            </div>
+            <span id="self-color" class="mc-color-badge" data-color="none">&mdash;</span>
+          </div>
+        </div>
+
+        <div class="mc-game-grid">
+          <div class="mc-board-panel">
+            <div class="mc-board-wrap">
+              <div id="chess-board" class="mc-board" role="group" aria-label="Chess board"></div>
+              <div id="promotion-overlay" class="mc-promotion" role="dialog" aria-modal="true" aria-labelledby="promotion-title" hidden>
+                <p id="promotion-title">Promote pawn to</p>
+                <div id="promotion-buttons" class="mc-promotion-buttons"></div>
+                <button id="promotion-cancel" class="mc-link" type="button">Cancel</button>
+              </div>
+            </div>
+            <p id="board-note" class="mc-board-note">Waiting for the connection&hellip;</p>
+          </div>
+
+          <aside class="mc-side">
+            <article class="mc-card mc-status-card">
+              <h2>Game status</h2>
+              <p id="game-status" class="mc-game-status" aria-live="polite">Waiting for the game to start&hellip;</p>
+              <p id="game-detail" class="mc-hint"></p>
+            </article>
+
+            <article class="mc-card">
+              <div class="mc-side-head">
+                <h2>Move history</h2>
+                <span id="move-count" class="mc-meta">0 moves</span>
+              </div>
+              <ol id="move-history" class="mc-history">
+                <li class="mc-empty">No moves yet.</li>
+              </ol>
+            </article>
+
+            <article class="mc-card">
+              <h2>Captured pieces</h2>
+              <div class="mc-captured-row">
+                <span>By White</span>
+                <div id="captured-white" class="mc-captured" data-empty="true">&mdash;</div>
+              </div>
+              <div class="mc-captured-row">
+                <span>By Black</span>
+                <div id="captured-black" class="mc-captured" data-empty="true">&mdash;</div>
+              </div>
+            </article>
+
+            <div class="mc-game-actions">
+              <button id="btn-new-game" class="btn btn-ghost" type="button" disabled>New game</button>
+              <button id="btn-resign" class="btn btn-danger" type="button" disabled>Resign</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a class="brand brand-footer" href="/" aria-label="Gameora home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" focusable="false">
+              <rect x="6" y="6" width="8" height="8" rx="2.5" fill="#ffffff"></rect>
+              <rect x="18" y="6" width="8" height="8" rx="2.5" fill="#c7d2fe"></rect>
+              <rect x="6" y="18" width="8" height="8" rx="2.5" fill="#c7d2fe"></rect>
+              <rect x="18" y="18" width="8" height="8" rx="2.5" fill="#fbbf24"></rect>
+            </svg>
+          </span>
+          <span class="brand-text">Gameora</span>
+        </a>
+        <p>Multiplayer Chess uses private room codes and browser-native WebRTC. No accounts and no game server; only a temporary signaling store introduces the two browsers.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/">Home</a>
+        <a href="/games">All games</a>
+        <a href="/api/games">Games API</a>
+      </nav>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; <span id="footer-year">2026</span> Gameora. Single-player games run locally in your browser.</p>
+      <p>Multiplayer Chess &middot; STUN-free WebRTC</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="mc-toast" role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="/static/games/multiplayer-chess/js/main.js"></script>
+</body>
+</html>
